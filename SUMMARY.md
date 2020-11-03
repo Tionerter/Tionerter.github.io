@@ -1,7 +1,6 @@
 # Table of contents
 
-* [开篇词](README.md)
+* [个人主页](README.md)
 
-* [第一章1](第一章.md)
+* [图形学](图形学/向量.md)
 
-	* [Node.js安装](nodejs-install.md)
