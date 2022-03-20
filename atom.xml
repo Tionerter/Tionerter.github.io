@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>企鹅屋</title>
+  <icon>http://example.com/icon.png</icon>
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2022-03-20T15:44:56.911Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>阿T者,阳城人也,字鹅</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Addressable</title>
+    <link href="http://example.com/posts/9da42dea/"/>
+    <id>http://example.com/posts/9da42dea/</id>
+    <published>2022-03-20T07:30:35.000Z</published>
+    <updated>2022-03-20T15:44:56.911Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;1.什么是Asset&lt;/p&gt;
+&lt;p&gt;就是我们用来制作游戏的资源，列如.png .fbx</summary>
+        
+      
+    
+    
+    
+    <category term="Untiy" scheme="http://example.com/categories/Untiy/"/>
+    
+    
+    <category term="热更新" scheme="http://example.com/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>test1</title>
+    <link href="http://example.com/posts/8ab2dce2/"/>
+    <id>http://example.com/posts/8ab2dce2/</id>
+    <published>2022-03-19T16:22:07.000Z</published>
+    <updated>2022-03-20T15:46:51.648Z</updated>
+    
+    
+    <summary type="html">destest</summary>
+    
+    
+    
+    <category term="test" scheme="http://example.com/categories/test/"/>
+    
+    <category term="test2" scheme="http://example.com/categories/test/test2/"/>
+    
+    
+    <category term="test" scheme="http://example.com/tags/test/"/>
+    
+  </entry>
+  
+</feed>

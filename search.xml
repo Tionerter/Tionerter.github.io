@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>Addressable</title>
+      <link href="/posts/9da42dea/"/>
+      <url>/posts/9da42dea/</url>
+      
+        <content type="html"><![CDATA[<p>1.什么是Asset</p><p>就是我们用来制作游戏的资源，列如.png .fbx .wav,在profect窗口所看到的东西</p><p>2.Asset是如何加入游戏里面的去的</p><p>（1）直接引用：直接把资源拖拽到Hierarchy</p><p>（2）间接引用：</p><p>3.为什么要使用Addressable</p><div id="gitalk-container"></div><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalkConfig = {"clientID":"3797dab9ae4cff55452a","clientSecret":"2ce066e1af402f16e2077122507b5810478a8aaf","repo":"blog_comment","owner":"Tionerter","admin":["Tionerter"],"distractionFreeMode":false};    gitalkConfig.id = md5(location.pathname);var gitalk = new Gitalk(gitalkConfig);    gitalk.render("gitalk-container");    </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> Untiy </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 热更新 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>test1</title>
+      <link href="/posts/8ab2dce2/"/>
+      <url>/posts/8ab2dce2/</url>
+      
+        <content type="html"><![CDATA[<h1 id="title1"><a href="#title1" class="headerlink" title="title1"></a>title1</h1><p>something </p><h2 id="titill2"><a href="#titill2" class="headerlink" title="titill2"></a>titill2</h2><p>something</p><img src="/posts/8ab2dce2/image-20220320002522580.png" class="" title="This is an example image"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink:</span><br><span class="line">  alg: crc32      #support crc16(default) and crc32</span><br><span class="line">  rep: hex        #support dec(default) and hex</span><br><span class="line">  drafts: false   #(true)Process draft,(false)Do not process draft. false(default) </span><br><span class="line">  # Generate categories from directory-tree</span><br><span class="line">  # depth: the max_depth of directory-tree you want to generate, should &gt; 0</span><br><span class="line">  auto_category:</span><br><span class="line">     enable: true  #true(default)</span><br><span class="line">     depth:        #3(default)</span><br><span class="line">     over_write: false </span><br><span class="line">  auto_title: false #enable auto title, it can auto fill the title by path</span><br><span class="line">  auto_date: false #enable auto date, it can auto fill the date by time today</span><br><span class="line">  force: false #enable force mode,in this mode, the plugin will ignore the cache, and calc the abbrlink for every post even it already had abbrlink. This only updates abbrlink rather than other front variables.</span><br></pre></td></tr></table></figure><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int</span> i=<span class="number">0</span>;</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int i=0</span><br></pre></td></tr></table></figure><div id="gitalk-container"></div><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalkConfig = {"clientID":"3797dab9ae4cff55452a","clientSecret":"2ce066e1af402f16e2077122507b5810478a8aaf","repo":"blog_comment","owner":"Tionerter","admin":["Tionerter"],"distractionFreeMode":false};    gitalkConfig.id = md5(location.pathname);var gitalk = new Gitalk(gitalkConfig);    gitalk.render("gitalk-container");    </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> test </category>
+          
+          <category> test2 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> test </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
