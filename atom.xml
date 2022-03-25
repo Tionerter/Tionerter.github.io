@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-03-20T15:44:56.911Z</updated>
+  <updated>2022-03-25T14:54:57.207Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -17,11 +17,30 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>AssetBundle</title>
+    <link href="http://example.com/posts/3b287ac7/"/>
+    <id>http://example.com/posts/3b287ac7/</id>
+    <published>2022-03-25T12:34:14.000Z</published>
+    <updated>2022-03-25T14:54:57.207Z</updated>
+    
+    
+    <summary type="html">关于AssetBundle的一些事项</summary>
+    
+    
+    
+    <category term="Unity" scheme="http://example.com/categories/Unity/"/>
+    
+    
+    <category term="资源管理" scheme="http://example.com/tags/%E8%B5%84%E6%BA%90%E7%AE%A1%E7%90%86/"/>
+    
+  </entry>
+  
+  <entry>
     <title>Addressable</title>
     <link href="http://example.com/posts/9da42dea/"/>
     <id>http://example.com/posts/9da42dea/</id>
     <published>2022-03-20T07:30:35.000Z</published>
-    <updated>2022-03-20T15:44:56.911Z</updated>
+    <updated>2022-03-21T07:36:11.151Z</updated>
     
     
       
@@ -39,27 +58,6 @@
     
     
     <category term="热更新" scheme="http://example.com/tags/%E7%83%AD%E6%9B%B4%E6%96%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>test1</title>
-    <link href="http://example.com/posts/8ab2dce2/"/>
-    <id>http://example.com/posts/8ab2dce2/</id>
-    <published>2022-03-19T16:22:07.000Z</published>
-    <updated>2022-03-20T15:46:51.648Z</updated>
-    
-    
-    <summary type="html">destest</summary>
-    
-    
-    
-    <category term="test" scheme="http://example.com/categories/test/"/>
-    
-    <category term="test2" scheme="http://example.com/categories/test/test2/"/>
-    
-    
-    <category term="test" scheme="http://example.com/tags/test/"/>
     
   </entry>
   

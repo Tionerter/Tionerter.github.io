@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>AssetBundle</title>
+      <link href="/posts/3b287ac7/"/>
+      <url>/posts/3b287ac7/</url>
+      
+        <content type="html"><![CDATA[<h1 id="AssetBundle中的依赖关系"><a href="#AssetBundle中的依赖关系" class="headerlink" title="AssetBundle中的依赖关系"></a>AssetBundle中的依赖关系</h1><ul><li>出现依赖的情况</li></ul><p>假设有一个ab包A，A中有游戏物体a引用了另外一个ab包B中的游戏物体b，那么就可以说两者之间存在依赖</p><p>在尝试加载A包中的物体a时，要先确定加载了B包中的物体b，但A,B两个包的加载顺序不重要</p><ul><li>不出现依赖的情况</li></ul><p>但如果此时ab包A中引用的游戏物体b，并不存在于任何ab包中，那么在打包A包的时候就会拷贝一份b进入A包中，在单个包中还没有问题，但如果有多个ab包都引用了b，那么每一个ab包都会产生一份c的复制在自己的包内</p><p>对于多个ab共享的资源，需要单独打包成一个ab包，并在加载这些ab包之前，先加载这个共享的ab包</p><p>Untiy提供了一个加载依赖包的机制，在构成AB包时，会额外生成一个关于生成目录的AB包及其清单文件，可以通过加载这个AB包来获取依赖包的信息，来先加载依赖包</p><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="comment">//加载额外的AB包</span></span><br><span class="line">AssetBundle assetBundle = AssetBundle.LoadFromFile(manifestFilePath);</span><br><span class="line"><span class="comment">//从AB包中加载清单文件信息</span></span><br><span class="line">AssetBundleManifest manifest = assetBundle.LoadAsset&lt;AssetBundleManifest&gt;(<span class="string">&quot;AssetBundleManifest&quot;</span>);</span><br><span class="line"><span class="built_in">string</span>[] dependencies = manifest.GetAllDependencies(<span class="string">&quot;assetBundle&quot;</span>); <span class="comment">//Pass the name of the bundle you want the dependencies for.</span></span><br><span class="line"><span class="keyword">foreach</span>(<span class="built_in">string</span> dependency <span class="keyword">in</span> dependencies)</span><br><span class="line">&#123;</span><br><span class="line">    AssetBundle.LoadFromFile(Path.Combine(assetBundlePath, dependency));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><h1 id="AssetBundle的构建"><a href="#AssetBundle的构建" class="headerlink" title="AssetBundle的构建"></a>AssetBundle的构建</h1><p>BuildAssetBundleOptions</p><ul><li><code>BuildAssetBundleOptions.None</code>: 使用LZMA压缩，包大小比使用LZ4小，但需要更多的加载时间，使用前需要被整个重新解压，然后再使用LZ4压缩缓存，这种格式下可以加载单个文件，而不需要解压整个包。如果AB包是通过UnityWebRequestAssetBundle下载得到的，会被自动解压然后再LZ4压缩缓存在本地，因为包小是网络传输优先使用的格式</li><li><code>BuildAssetBundleOptions.UncompressedAssetBundle</code>: 不压缩，导致包更大，但加载速度更快</li><li><code>BuildAssetBundleOptions.ChunkBasedCompression</code>: 直接使用LZ4压缩，基于块的算法，加载单个资产时直接解压包含该资产的块，而不需要解压整个包，产生的包比LZM4的包大，但加载速度与不压缩相当</li></ul><p>会生成2（n+1）个文件，2：具体分为具体类型的AB包和其清单文件.manifest，+1：还要额外生成一个关于生成目录的AB包和清单文件</p><h1 id="AssetBundle的加载和卸载"><a href="#AssetBundle的加载和卸载" class="headerlink" title="AssetBundle的加载和卸载"></a>AssetBundle的加载和卸载</h1><p>加载AB包</p><ul><li><p>AssetBundle.LoadFromMemoryAsync：如果加载的AB包是LZMA格式会自动解压，LZ4不会</p><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Example</span> : <span class="title">MonoBehaviour</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">IEnumerator <span class="title">LoadFromMemoryAsync</span>(<span class="params"><span class="built_in">string</span> path</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        AssetBundleCreateRequest createRequest = AssetBundle.LoadFromMemoryAsync(File.ReadAllBytes(path));</span><br><span class="line">        <span class="keyword">yield</span> <span class="keyword">return</span> createRequest;</span><br><span class="line">        AssetBundle bundle = createRequest.assetBundle;</span><br><span class="line">        <span class="keyword">var</span> prefab = bundle.LoadAsset&lt;GameObject&gt;(<span class="string">&quot;MyObject&quot;</span>);</span><br><span class="line">        Instantiate(prefab);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li><li><p>AssetBundle.LoadFromFile：从本地读取AB的方法，如果是无压缩或者LZ4格式，加载速度会很快，如果是LZMA格式会在第一次加载的时候解压</p></li><li><p>UnityWebRequest和UnityWebRequestAssetBundle.GetAssetBundle：从指定的url下载AB包，UnityWebRequestAssetBundle.GetAssetBundle函数返回一个 UnityWebRequest，并将DownloadHandlerAssetBundle附加到返回的UnityWebRequest]。此DownloadHandler有一个特殊的DownloadHandlerAssetBundle.assetBundle属性，一旦下载并解码了足够多的数据就可以使用该属性来提取包内的资源。</p></li></ul><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="function">IEnumerator <span class="title">GetText</span>()</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">using</span> (UnityWebRequest uwr = UnityWebRequestAssetBundle.GetAssetBundle(<span class="string">&quot;https://www.my-server.com/mybundle&quot;</span>))</span><br><span class="line">   &#123;</span><br><span class="line">       <span class="keyword">yield</span> <span class="keyword">return</span> uwr.SendWebRequest();</span><br><span class="line"></span><br><span class="line">       <span class="keyword">if</span> (uwr.result != UnityWebRequest.Result.Success)</span><br><span class="line">       &#123;</span><br><span class="line">          Debug.Log(uwr.error);</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">else</span></span><br><span class="line">       &#123;</span><br><span class="line">          <span class="comment">// Get downloaded asset bundle</span></span><br><span class="line">          AssetBundle bundle = DownloadHandlerAssetBundle.GetContent(uwr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>卸载AB包<br>AssetBundle.Unload(bool)<br>true：卸载AB包，以及所有的从AB包中加载出来的资源及其依赖项，如果场景中有物体保持了引用，引用丢失。但不会卸载通过从AB包中加载的资源实例化生成的GameObject和复制的GameObject（这已经不属于AB包的东西）</p><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> prefab = myLoadedAssetBundle.LoadAllAssets&lt;GameObject&gt;();</span><br><span class="line"><span class="comment">//prefab是从AB包加载的内容，会被卸载</span></span><br><span class="line"><span class="keyword">for</span> (<span class="built_in">int</span> i = <span class="number">0</span>; i &lt; prefab.Length; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//实例生成的对象不会被卸载</span></span><br><span class="line">Instantiate(prefab[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p><img src="/2022-03-25-AssetBundle/image-20220325010851645.png" alt="image-20220325010851645"><br>false：卸载AB自身，并不会影响AB中已经加载出来的的资源，但会破坏实例链：</p><p>比如从AB包A中加载了一个material（没有对该材质的引用只是加载进内存），然后卸载A包，这个材质就是一个野资源，同时哪怕重新加载A包，该材质也不会和新加载的A包产生关联。Untiy提供Resources.UnloadUnusedAssets函数来处理这些野资源（显式或者在非附加加载新场景时自动调用）</p><p><img src="/2022-03-25-AssetBundle/image-20220325212226867.png" alt="image-20220325212226867"></p><h1 id="AssetBundle的缓存"><a href="#AssetBundle的缓存" class="headerlink" title="AssetBundle的缓存"></a>AssetBundle的缓存</h1><p>Untiy的AB包有两种缓存位置</p><ul><li><strong>内存缓存</strong>：以 UncompressedRuntime 格式将Ab包存储在RAM 中。</li><li><strong>磁盘缓存</strong>：以LZMA，LZ4或不压缩格式将获取的 AB包存储在磁盘上。</li></ul><p>通过UnityWebRequire（UWR）的获取的AB包，如果在下载AB包时向 UWR API 提供额外version参数，Unity 会把AB包缓存在磁盘中。如果不提供version参数，Unity 会缓存在内存中。version 参数可以是版本号或哈希值。如果<a href="https://docs.unity3d.com/ScriptReference/Caching-compressionEnabled.html">Caching.compressionEnabled</a>设置为 true，Unity 会在将 AssetBundle 写入磁盘以进行所有后续下载时应用 LZ4 压缩。它不会压缩缓存中现有的未压缩数据。如果<a href="https://docs.unity3d.com/ScriptReference/Caching-compressionEnabled.html">Caching.compressionEnabled</a>为 false，Unity 在将 AssetBundle 写入磁盘时不应用压缩。</p><p>通过AssetBundle.LoadFromFile或AssetBundle.LoadFromFileAsync加载的lZMA格式的AB包，总是缓存在内存，可以使用AssetBundle.RecompressAssetBundleAsync更改AB包的格式并缓存在磁盘上</p><div id="gitalk-container"></div><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalkConfig = {"clientID":"3797dab9ae4cff55452a","clientSecret":"2ce066e1af402f16e2077122507b5810478a8aaf","repo":"blog_comment","owner":"Tionerter","admin":["Tionerter"],"distractionFreeMode":false};    gitalkConfig.id = md5(location.pathname);var gitalk = new Gitalk(gitalkConfig);    gitalk.render("gitalk-container");    </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> Unity </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 资源管理 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Addressable</title>
       <link href="/posts/9da42dea/"/>
       <url>/posts/9da42dea/</url>
@@ -21,33 +46,6 @@
         <tags>
             
             <tag> 热更新 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>test1</title>
-      <link href="/posts/8ab2dce2/"/>
-      <url>/posts/8ab2dce2/</url>
-      
-        <content type="html"><![CDATA[<h1 id="title1"><a href="#title1" class="headerlink" title="title1"></a>title1</h1><p>something </p><h2 id="titill2"><a href="#titill2" class="headerlink" title="titill2"></a>titill2</h2><p>something</p><img src="/posts/8ab2dce2/image-20220320002522580.png" class="" title="This is an example image"><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">abbrlink:</span><br><span class="line">  alg: crc32      #support crc16(default) and crc32</span><br><span class="line">  rep: hex        #support dec(default) and hex</span><br><span class="line">  drafts: false   #(true)Process draft,(false)Do not process draft. false(default) </span><br><span class="line">  # Generate categories from directory-tree</span><br><span class="line">  # depth: the max_depth of directory-tree you want to generate, should &gt; 0</span><br><span class="line">  auto_category:</span><br><span class="line">     enable: true  #true(default)</span><br><span class="line">     depth:        #3(default)</span><br><span class="line">     over_write: false </span><br><span class="line">  auto_title: false #enable auto title, it can auto fill the title by path</span><br><span class="line">  auto_date: false #enable auto date, it can auto fill the date by time today</span><br><span class="line">  force: false #enable force mode,in this mode, the plugin will ignore the cache, and calc the abbrlink for every post even it already had abbrlink. This only updates abbrlink rather than other front variables.</span><br></pre></td></tr></table></figure><figure class="highlight c#"><table><tr><td class="code"><pre><span class="line"><span class="built_in">int</span> i=<span class="number">0</span>;</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">int i=0</span><br></pre></td></tr></table></figure><div id="gitalk-container"></div><script src="https://cdn.bootcss.com/blueimp-md5/2.12.0/js/md5.min.js"></script><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalkConfig = {"clientID":"3797dab9ae4cff55452a","clientSecret":"2ce066e1af402f16e2077122507b5810478a8aaf","repo":"blog_comment","owner":"Tionerter","admin":["Tionerter"],"distractionFreeMode":false};    gitalkConfig.id = md5(location.pathname);var gitalk = new Gitalk(gitalkConfig);    gitalk.render("gitalk-container");    </script>]]></content>
-      
-      
-      <categories>
-          
-          <category> test </category>
-          
-          <category> test2 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> test </tag>
             
         </tags>
       
